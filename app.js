@@ -13,7 +13,12 @@ const telegramRouter = require("./src/routes/telegram");
 app.set("port", port);
 
 app.use(express.json());
-app.use("/", telegramRouter);
+
+// Check service is available
+app.get("/", (req, res) => {
+  return res.status(200).send({ status: "Service is available" });
+});
+app.use("/telegram", telegramRouter);
 
 server.listen(port);
 server.on("listening", onListening);

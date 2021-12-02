@@ -8,7 +8,6 @@ router.get("/", (req, res) => {
 
 // webhook
 router.post("/", (req, res) => {
-    console.log(req.body);
     /*
         You can put the logic you want here
         the message receive will be in this
@@ -27,7 +26,7 @@ router.post("/", (req, res) => {
 
         return res.status(200).send({
             method: "sendMessage",
-            chatId,
+            chat_id: chatId,
             text: `Привет, ${firstName}`,
         });
     }

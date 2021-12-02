@@ -1,0 +1,13 @@
+{
+    "name": "address.storage",
+    "description": "Implementation of a telegram bot for address storage of goods",
+    "repository": "https://github.com/HeightBro/address.storage",
+    "keywords": [
+        "telegram",
+        "bot",
+        "firebase",
+        "nodejs",
+        "express",
+        "heroku"
+    ]
+}

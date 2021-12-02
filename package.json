@@ -1,0 +1,26 @@
+{
+  "name": "address.storage",
+  "version": "1.0.0",
+  "description": "Implementation of a telegram bot for address storage of goods",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "firebase",
+    "nodejs",
+    "express",
+    "heroku"
+  ],
+  "author": "Oleg Frolov, Ruslan Antonenko",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  },
+  "engines": {
+    "node": "14.x"
+  }
+}

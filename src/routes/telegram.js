@@ -33,3 +33,5 @@ router.post("/", (req, res) => {
 
     return res.status(200).send({ status: "not a telegram message" });
 });
+
+module.exports = router;

@@ -8,6 +8,7 @@ router.get("/", (req, res) => {
 
 // webhook
 router.post("/", (req, res) => {
+    console.log(req.body);
     /*
         You can put the logic you want here
         the message receive will be in this

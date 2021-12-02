@@ -23,7 +23,7 @@ router.post("/", (req, res) => {
 
     if (isTelegramMessage) {
         const chatId = req.body.message.chat.id;
-        const { firstName } = req.body.message.from;
+        const firstName = req.body.message.from.first_name;
 
         return res.status(200).send({
             method: "sendMessage",

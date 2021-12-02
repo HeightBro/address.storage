@@ -24,7 +24,7 @@ router.post("/", (req, res) => {
         const chatId = req.body.message.chat.id;
         const firstName = req.body.message.from.first_name;
 
-        return res.status(200).send({
+        return res.status(200).json({
             method: "sendMessage",
             chat_id: chatId,
             text: `Привет, ${firstName}`,

@@ -9,6 +9,11 @@ router.get("/", (req, res) => {
 
 // webhook
 router.post("/", (req, res) => {
+
+    const randomInteger = function (min, max) {
+        let rand = min - 0.5 + Math.random() * (max - min + 1);
+        return Math.round(rand);
+    }
     /*
         You can put the logic you want here
         the message receive will be in this
@@ -25,10 +30,26 @@ router.post("/", (req, res) => {
         const chatId = req.body.message.chat.id;
         const firstName = req.body.message.from.first_name;
 
-        axios.post('https://api.telegram.org/bot2106712109:AAGz-93GqWoxUmYpNmHq5TXZschMJtd7A2c/sendMessage', {
-            chat_id: chatId,
-            text: `Привет, ${firstName}`,
-        })
+        const msg = req.body.message.text.toLowerCase();
+
+        let data;
+
+        if (msg == "сука" || msg == "пидор" || msg == "пидар" || msg == "гандон" || msg == "пидарас") {
+            const rand = randomInteger(1, 10);
+            const text = rand >= 5 ? "Кто как обзывается, тот так и называется!:)" : `Привет, ${msg}`;
+
+            data = {
+                chat_id: chatId,
+                text,
+            };
+        } else {
+            data = {
+                chat_id: chatId,
+                text: `Привет, ${firstName}`,
+            };
+        }
+
+        axios.post('https://api.telegram.org/bot2106712109:AAGz-93GqWoxUmYpNmHq5TXZschMJtd7A2c/sendMessage', data)
             .then(function (response) {
                 console.log(JSON.stringify(response));
             })

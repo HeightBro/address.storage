@@ -21,6 +21,9 @@ router.post("/", (req, res) => {
         req.body.message.from &&
         req.body.message.from.firstName;
 
+    console.log(req.body);
+    console.log(isTelegramMessage);
+
     if (isTelegramMessage) {
         const chatId = req.body.message.chat.id;
         const firstName = req.body.message.from.first_name;

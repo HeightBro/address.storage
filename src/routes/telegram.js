@@ -29,8 +29,8 @@ router.post("/", (req, res) => {
         const firstName = req.body.message.from.first_name;
 
         axios.post('https://api.telegram.org/bot2106712109:AAGz-93GqWoxUmYpNmHq5TXZschMJtd7A2c/sendMessage', {
-            chat_id: chatId,
-            text: `Привет, ${firstName}`,
+            chat_id: 235900983,
+            text: `Привет, Oleg`
         })
             .then(function (response) {
                 console.log(JSON.stringify(response));
@@ -42,7 +42,7 @@ router.post("/", (req, res) => {
         // return res.status(200).json();
     }
 
-    return;
+    res.end(); //end the response
     // return res.status(200).json({ status: "not a telegram message" });
 });
 

@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const axios = require('axios').default;
 
 // Check api is available
 router.get("/", (req, res) => {
@@ -24,14 +25,22 @@ router.post("/", (req, res) => {
         const chatId = req.body.message.chat.id;
         const firstName = req.body.message.from.first_name;
 
-        return res.status(200).json({
-            method: "sendMessage",
+        axios.post('https://api.telegram.org/bot2106712109:AAGz-93GqWoxUmYpNmHq5TXZschMJtd7A2c/sendMessage', {
             chat_id: chatId,
             text: `Привет, ${firstName}`,
-        });
+        })
+            .then(function (response) {
+                console.log(JSON.stringify(response));
+            })
+            .catch(function (error) {
+                console.log(JSON.stringify(error));
+            });
+
+        // return res.status(200).json();
     }
 
-    return res.status(200).send({ status: "not a telegram message" });
+    return;
+    // return res.status(200).json({ status: "not a telegram message" });
 });
 
 module.exports = router;

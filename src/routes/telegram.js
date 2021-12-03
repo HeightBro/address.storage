@@ -19,25 +19,17 @@ router.post("/", (req, res) => {
         req.body.message.chat &&
         req.body.message.chat.id &&
         req.body.message.from &&
-        req.body.message.from.firstName;
-
-    console.log(req.body);
-    console.log(isTelegramMessage);
+        req.body.message.from.first_name;
 
     if (isTelegramMessage) {
         const chatId = req.body.message.chat.id;
         const firstName = req.body.message.from.first_name;
 
-        axios.post('https://api.telegram.org/bot2106712109:AAGz-93GqWoxUmYpNmHq5TXZschMJtd7A2c/sendMessage', {
-            chat_id: 235900983,
-            text: `Привет, Oleg`
-        })
-            .then(function (response) {
-                console.log(JSON.stringify(response));
-            })
-            .catch(function (error) {
-                console.log(JSON.stringify(error));
-            });
+        return res.status(200).json({
+            method: "sendMessage",
+            chatId,
+            text: `Привет, ${firstName}`,
+        });
 
         // return res.status(200).json();
     }

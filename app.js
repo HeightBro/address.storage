@@ -7,8 +7,7 @@ const app = express();
 const server = http.createServer(app);
 const port = normalizePort(process.env.PORT || "3000");
 
-// Routers
-const telegramRouter = require("./src/routes/telegram");
+const apiRouter = require("./src/routes/api");
 
 app.set("port", port);
 
@@ -18,14 +17,15 @@ app.use(express.json());
 app.get("/", (req, res) => {
   return res.status(200).send({ status: "Service is available" });
 });
-app.use("/telegram", telegramRouter);
+
+app.use("/api", apiRouter);
 
 server.listen(port);
 server.on("listening", onListening);
 server.on("error", onError);
 
 /**
- * Нормализовать порт в число, строку или false
+ * Normalize port to number, string or false
  */
 function normalizePort(val) {
   var port = parseInt(val, 10);

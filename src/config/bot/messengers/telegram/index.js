@@ -46,7 +46,7 @@ const telegram = () => {
             },
             {
                 name_en: 'Delete cell',
-                command: '/' + constants.commands.delete_product,
+                command: '/' + constants.commands.delete_cell,
                 description: 'Удалить ячейку'
             }
         ],

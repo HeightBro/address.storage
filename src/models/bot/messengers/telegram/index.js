@@ -72,12 +72,10 @@ class Telegram extends Bot {
                 .then((res) => {
                     switch (this.command) {
                         case constants.commands.start:
-                            this.db.saveStep(ref, stepData);
-                            return this.sayHello();
+                            return resolve(this.sayHello());
 
                         case constants.commands.help:
-                            this.db.saveStep(ref, stepData);
-                            return this.createHelp();
+                            return resolve(this.createHelp());
 
                         case constants.commands.add_cell:
                         case constants.commands.add_product:
@@ -120,11 +118,10 @@ class Telegram extends Bot {
                         //     break;
 
                         case constants.commands.delete_cell:
-                            this.db.saveStep(ref, stepData);
-                            return this.createStubAnswer(this.config.stub_messages.in_development);
+                            return resolve(this.createStubAnswer(this.config.stub_messages.in_development));
 
                         default:
-                            return this.createStubAnswer(this.config.stub_messages.in_development);
+                            return resolve(this.createStubAnswer(this.config.stub_messages.in_development));
                     }
                 }).catch((e) => {
                     console.log(e);

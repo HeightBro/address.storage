@@ -33,7 +33,7 @@ router.post("/webhook", (req, res) => {
         try {
             telegram.handleRequest(req)
                 .then((data) => {
-                    // TODO: ловить ошибки Телеги
+                    // TODO: ловить ошибки Телеги!
                     const url = telegram.createUrl('sendMessage');
                     telegram.send('post', url, data);
                 }).catch((e) => {

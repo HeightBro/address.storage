@@ -2,18 +2,15 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 const path = require('path');
 
-const appConfig = require(path.resolve(__dirname, '../../../..', 'config'));
-
 const dbModule = require(path.resolve(__dirname, '../../../..', 'models/database/firebase'));
 
-const telegramConfig = require(path.resolve(__dirname, '../../../..', 'config/bot/messengers/telegram'));
 const Telegram = require(path.resolve(__dirname, '../../../..', 'models/bot/messengers/telegram'));
 
 let telegram;
 
 const init = () => {
     const database = new dbModule();
-    telegram = new Telegram(telegramConfig, database);
+    telegram = new Telegram(database);
 }
 
 // Check api is available
@@ -26,7 +23,7 @@ router.post("/webhook", (req, res) => {
     try {
         init();
     } catch (error) {
-        return res.status(appConfig.errors.internal.code).send({ success: false, error: { message: appConfig.errors.internal.message }, result: null });
+        return res.status(global.config.errors.internal.code).send({ success: false, error: { message: global.config.errors.internal.message }, result: null });
     }
 
     if (telegram.isTelegramMessage(req)) {
@@ -38,10 +35,10 @@ router.post("/webhook", (req, res) => {
                     telegram.send('post', url, data);
                 }).catch((e) => {
                     console.log(e);
-                    return res.status(appConfig.errors.internal.code).send({ success: false, error: { message: appConfig.errors.internal.message }, result: null });
+                    return res.status(global.config.errors.internal.code).send({ success: false, error: { message: global.config.errors.internal.message }, result: null });
                 });
         } catch (e) {
-            return res.status(appConfig.errors.internal.code).send({ success: false, error: { message: appConfig.errors.internal.message }, result: null });
+            return res.status(global.config.errors.internal.code).send({ success: false, error: { message: global.config.errors.internal.message }, result: null });
         }
     }
 

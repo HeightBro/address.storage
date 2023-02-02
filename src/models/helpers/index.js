@@ -18,9 +18,23 @@ const isEmptyObject = (obj) => {
 //     return command.split('_').map(v => capitalizeFirstLetter(v)).join('');
 // };
 
+const deepFreezeObject = (obj) => {
+    var propNames = Object.getOwnPropertyNames(obj);
+
+    propNames.forEach((name) => {
+        var prop = obj[name];
+
+        if (typeof prop == 'object' && prop !== null)
+            deepFreezeObject(prop);
+    });
+
+    return Object.freeze(obj);
+}
+
 module.exports = {
     sprintf,
     capitalizeFirstLetter,
     isEmptyObject,
     // commandToProcessName,
+    deepFreezeObject,
 }

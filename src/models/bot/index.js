@@ -4,8 +4,7 @@ const path = require('path');
 const processConfig = require(path.resolve(__dirname, '../..', 'config/process'));
 
 class Bot {
-    constructor(config, db) {
-        this.config = config;
+    constructor(db) {
         this.db = db;
         this.process = null;
         this.helpers = require(path.resolve(__dirname, '..', 'helpers'));
@@ -23,11 +22,11 @@ class Bot {
     };
 
     botAvailable(name) {
-        return this.config.bots_available.indexOf(name) > -1;
+        return global.config.bots.bots_available.indexOf(name) > -1;
     };
 
     serviceAvailable(type) {
-        return this.config.services_available.indexOf(type) > -1;
+        return global.config.bots.services_available.indexOf(type) > -1;
     };
 
     initProcess(command) {
@@ -49,6 +48,10 @@ class Bot {
     setProcess(process) {
         this.process = process;
     };
+
+    botConfig(service, type) {
+        return global.config.bots.services[service][type];
+    }
 }
 
 module.exports = Bot;

@@ -5,8 +5,8 @@ const Bot = require(path.resolve(__dirname, '../../../..', 'models/bot'));
 const constants = require(path.resolve(__dirname, '../../../..', 'config/constants'));
 
 class Telegram extends Bot {
-    constructor(config, db) {
-        super(config, db);
+    constructor(db) {
+        super(db);
 
         this.baseUrl = this.getBaseUrl();
         this.message = {};
@@ -29,15 +29,15 @@ class Telegram extends Bot {
     };
 
     createHelp() {
-        const commands = Array.from(this.config.commands)
+        const commands = Array.from(this.botConfig().commands)
 
         let text = '';
         commands.forEach(value => {
             // TODO: составить нормальную регулярку и вынести её в конфиг
-            text += `${value.command.replace(this.config.reg_exp.send_message, '\\$&')} ${value.description}\n`;
+            text += `${value.command.replace(this.botConfig().reg_exp.send_message, '\\$&')} ${value.description}\n`;
         });
 
-        return this.createAnswer(text, this.config.parseModes.mdV2);
+        return this.createAnswer(text, this.botConfig().parseModes.mdV2);
     };
 
     createStubAnswer(text, parseMode = '') {
@@ -57,7 +57,7 @@ class Telegram extends Bot {
     };
 
     getBaseUrl() {
-        return `${this.config.base_url}${this.config.token}`;
+        return this.botConfig().base_url + this.botConfig().token;
     };
 
     // Handle commands ('/*')
@@ -84,10 +84,10 @@ class Telegram extends Bot {
                             this.initProcess(this.command)
                                 .then((res) => {
                                     message = this.process.getStateMessage();
-                                    if (message) return resolve(this.createAnswer(message, this.config.parseModes.mdV2));
+                                    if (message) return resolve(this.createAnswer(message, this.botConfig().parseModes.mdV2));
                                 }).catch((e) => {
                                     message = 'error!!!';
-                                    return resolve(this.createAnswer(message, this.config.parseModes.mdV2));
+                                    return resolve(this.createAnswer(message, this.botConfig().parseModes.mdV2));
                                 });
                             break;
 
@@ -95,33 +95,33 @@ class Telegram extends Bot {
                         //     this.initProcess(this.command)
                         //         .then((res) => {
                         //             message = this.process.getStateMessage();
-                        //             if (message) return resolve(this.createAnswer(message, this.config.parseModes.mdV2));
+                        //             if (message) return resolve(this.createAnswer(message, this.botConfig().parseModes.mdV2));
                         //         }).catch((e) => {
                         //             message = 'error!!!';
-                        //             return resolve(this.createAnswer(message, this.config.parseModes.mdV2));
+                        //             return resolve(this.createAnswer(message, this.botConfig().parseModes.mdV2));
                         //         });
                         //     break;
 
                         // case constants.commands.view_cell:
                         //     this.db.saveStep(ref, stepData);
-                        //     return this.createStubAnswer(this.config.stub_messages.in_development);
+                        //     return this.createStubAnswer(this.botConfig().stub_messages.in_development);
 
                         // case constants.commands.delete_product:
                         //     this.initProcess(this.command)
                         //         .then((res) => {
                         //             message = this.process.getStateMessage();
-                        //             if (message) return resolve(this.createAnswer(message, this.config.parseModes.mdV2));
+                        //             if (message) return resolve(this.createAnswer(message, this.botConfig().parseModes.mdV2));
                         //         }).catch((e) => {
                         //             message = 'error!!!';
-                        //             return resolve(this.createAnswer(message, this.config.parseModes.mdV2));
+                        //             return resolve(this.createAnswer(message, this.botConfig().parseModes.mdV2));
                         //         });
                         //     break;
 
                         case constants.commands.delete_cell:
-                            return resolve(this.createStubAnswer(this.config.stub_messages.in_development));
+                            return resolve(this.createStubAnswer(this.botConfig().stub_messages.in_development));
 
                         default:
-                            return resolve(this.createStubAnswer(this.config.stub_messages.in_development));
+                            return resolve(this.createStubAnswer(this.botConfig().stub_messages.in_development));
                     }
                 }).catch((e) => {
                     console.log(e);
@@ -141,16 +141,16 @@ class Telegram extends Bot {
                                 .then((res) => {
                                     this.process.handleStateUserResponse(this.message.text)
                                         .then((res) => {
-                                            return resolve(this.createAnswer(this.process.getStateMessage(), this.config.parseModes.mdV2));
+                                            return resolve(this.createAnswer(this.process.getStateMessage(), this.botConfig().parseModes.mdV2));
                                         }).catch((e) => {
                                             console.log(e);
                                             let message = 'error!!!';
-                                            return resolve(this.createAnswer(message, this.config.parseModes.mdV2));
+                                            return resolve(this.createAnswer(message, this.botConfig().parseModes.mdV2));
                                         });
                                 }).catch((e) => {
                                     console.log(e);
                                     let message = 'error!!!';
-                                    return resolve(this.createAnswer(message, this.config.parseModes.mdV2));
+                                    return resolve(this.createAnswer(message, this.botConfig().parseModes.mdV2));
                                 });
                         }
                     })
@@ -225,7 +225,7 @@ class Telegram extends Bot {
     };
 
     methodAvailable(method) {
-        return this.config.methods_available.indexOf(method) > -1;
+        return this.botConfig().methods_available.indexOf(method) > -1;
     };
 
     checkHelloMsg(text) {
@@ -255,6 +255,10 @@ class Telegram extends Bot {
     send(method, url, data) {
         super.send(method, url, data);
     };
+
+    botConfig() {
+        return super.botConfig('messengers', 'telegram');
+    }
 }
 
 module.exports = Telegram;

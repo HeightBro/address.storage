@@ -1,8 +1,7 @@
 const axios = require('axios').default;
 
 class Bot {
-    constructor(config) {
-        this.config = config;
+    constructor() {
     }
 
     send(method, url, data) {
@@ -17,12 +16,16 @@ class Bot {
     };
 
     botAvailable(name) {
-        return this.config.bots_available.indexOf(name) > -1;
+        return global.config.bots.bots_available.indexOf(name) > -1;
     };
 
     serviceAvailable(type) {
-        return this.config.services_available.indexOf(type) > -1;
+        return global.config.bots.services_available.indexOf(type) > -1;
     };
+
+    botConfig(service, type) {
+        return global.config.bots.services[service][type];
+    }
 }
 
 module.exports = Bot;

@@ -2,11 +2,8 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 const path = require('path');
 
-const appConfig = require(path.resolve(__dirname, '../../../..', 'config'));
-
-const telegramConfig = require(path.resolve(__dirname, '../../../..', 'config/bot/messengers/telegram'));
 const Telegram = require(path.resolve(__dirname, '../../../..', 'models/bot/messengers/telegram'));
-const telegram = new Telegram(telegramConfig);
+const telegram = new Telegram();
 
 // Check api is available
 router.get("/", (req, res) => {
@@ -22,7 +19,7 @@ router.post("/webhook", (req, res) => {
             const url = telegram.createUrl('sendMessage');
             telegram.send('post', url, data);
         } catch (error) {
-            return res.status(appConfig.errors.internal.code).send({ success: false, error: { message: appConfig.errors.internal.message }, result: null });
+            return res.status(global.config.errors.internal.code).send({ success: false, error: { message: global.config.errors.internal.message }, result: null });
         }
     }
 

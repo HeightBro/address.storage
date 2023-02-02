@@ -4,9 +4,8 @@ const Bot = require(path.resolve(__dirname, '../../../..', 'models/bot'));
 const { sprintf, capitalizeFirstLetter } = require(path.resolve(__dirname, '../../../..', 'models/helpers'));
 
 class Telegram extends Bot {
-    constructor(config) {
+    constructor() {
         super();
-        this.config = config;
         this.baseUrl = this.getBaseUrl();
         this.message = {};
     }
@@ -44,7 +43,7 @@ class Telegram extends Bot {
     };
 
     getBaseUrl() {
-        return `${this.config.base_url}${this.config.token}`;
+        return this.botConfig().base_url + this.botConfig().token;
     };
 
     handleCommand() {
@@ -56,15 +55,15 @@ class Telegram extends Bot {
             case 'help':
                 return this.createHelp();
             case 'add_cell':
-                return this.createStubAnswer(this.config.stub_messages.in_development);
+                return this.createStubAnswer(this.botConfig().stub_messages.in_development);
             case 'add_product':
-                return this.createStubAnswer(this.config.stub_messages.in_development);
+                return this.createStubAnswer(this.botConfig().stub_messages.in_development);
             case 'view_cell':
-                return this.createStubAnswer(this.config.stub_messages.in_development);
+                return this.createStubAnswer(this.botConfig().stub_messages.in_development);
             case 'delete_product':
-                return this.createStubAnswer(this.config.stub_messages.in_development);
+                return this.createStubAnswer(this.botConfig().stub_messages.in_development);
             case 'delete_cell':
-                return this.createStubAnswer(this.config.stub_messages.in_development);
+                return this.createStubAnswer(this.botConfig().stub_messages.in_development);
 
             default:
                 break;
@@ -96,17 +95,17 @@ class Telegram extends Bot {
 
     createHelp() {
         let templates = {};
-        Object.assign(templates, this.config.templates.help);
+        Object.assign(templates, this.botConfig().templates.help);
 
         let text = '';
         for (const key in templates) {
             if (Object.hasOwnProperty.call(templates, key)) {
                 // TODO: составить регулярку и вынести её в конфиг
-                text += `${templates[key].command.replace(this.config.reg_exp.send_message, '\\$&')} ${templates[key].description}\n`;
+                text += `${templates[key].command.replace(this.botConfig().reg_exp.send_message, '\\$&')} ${templates[key].description}\n`;
             }
         }
 
-        return this.createAnswer(text, this.config.parseModes.mdV2);
+        return this.createAnswer(text, this.botConfig().parseModes.mdV2);
     };
 
     isTelegramMessage(data) {
@@ -123,7 +122,7 @@ class Telegram extends Bot {
     };
 
     methodAvailable(method) {
-        return this.config.methods_available.indexOf(method) > -1;
+        return this.botConfig().methods_available.indexOf(method) > -1;
     };
 
     sayHello() {
@@ -136,6 +135,10 @@ class Telegram extends Bot {
     send(method, url, data) {
         super.send(method, url, data);
     };
+
+    botConfig() {
+        return super.botConfig('messengers', 'telegram');
+    }
 }
 
 module.exports = Telegram;

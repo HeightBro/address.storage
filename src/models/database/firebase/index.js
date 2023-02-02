@@ -1,15 +1,12 @@
-const path = require('path');
+// const path = require('path');
 
 const { initializeApp, cert, getApps, getApp } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
 
-const config = require(path.resolve(__dirname, '../../..', 'config/database/firebase'));
-
 class FirebaseDB {
     constructor() {
-        this.app = !getApps().length ? initializeApp({ credential: cert(config.service_account) }) : getApp()
+        this.app = !getApps().length ? initializeApp({ credential: cert(this.dbConfig().service_account) }) : getApp()
         this.firestore = getFirestore();
-        this.config = config;
     }
 
     create(ref, data) {
@@ -55,7 +52,7 @@ class FirebaseDB {
     }
 
     // TODO: Переделать, чтобы collection_path брался из конфига сервиса
-    getRef(entity, doc = false, collectionPath = this.config.firebase.collection_path) {
+    getRef(entity, doc = false, collectionPath = this.dbConfig().firebase.collection_path) {
         let path = entity;
 
         if (collectionPath) path = `${path}/${collectionPath}`;
@@ -70,7 +67,7 @@ class FirebaseDB {
     }
 
     getUser(chatId) {
-        const ref = this.getRef(this.config.firebase.entities.users);
+        const ref = this.getRef(this.dbConfig().firebase.entities.users);
 
         return new Promise((resolve, reject) => {
             const where = {
@@ -95,21 +92,21 @@ class FirebaseDB {
     }
 
     saveUser(data, isAdmin = false) {
-        const ref = this.getRef(this.config.firebase.entities.users, data.chat_id);
+        const ref = this.getRef(this.dbConfig().firebase.entities.users, data.chat_id);
         data.is_admin = isAdmin;
 
         this.create(ref, data);
     }
 
     updateUser(data, isAdmin = false) {
-        const ref = this.getRef(this.config.firebase.entities.users, data.chat_id);
+        const ref = this.getRef(this.dbConfig().firebase.entities.users, data.chat_id);
         data.is_admin = isAdmin;
 
         this.update(ref, data);
     }
 
     getUserProcess(chatId) {
-        const ref = this.getRef(this.config.firebase.entities.user_processes);
+        const ref = this.getRef(this.dbConfig().firebase.entities.user_processes);
 
         return new Promise((resolve, reject) => {
             const where = {
@@ -134,18 +131,18 @@ class FirebaseDB {
     }
 
     saveUserProcess(data) {
-        const ref = this.getRef(this.config.firebase.entities.user_processes, data.chat_id);
+        const ref = this.getRef(this.dbConfig().firebase.entities.user_processes, data.chat_id);
         this.create(ref, data);
     }
 
     updateUserProcess(data) {
-        const ref = this.getRef(this.config.firebase.entities.user_processes, data.chat_id);
+        const ref = this.getRef(this.dbConfig().firebase.entities.user_processes, data.chat_id);
         this.update(ref, data);
     }
 
     deleteUserProcess(chatId) {
         return new Promise((resolve, reject) => {
-            const ref = this.getRef(this.config.firebase.entities.user_processes, chatId);
+            const ref = this.getRef(this.dbConfig().firebase.entities.user_processes, chatId);
 
             this.delete(ref)
                 .then((res) => {
@@ -158,12 +155,12 @@ class FirebaseDB {
     }
 
     addCell(data) {
-        const ref = this.getRef(this.config.firebase.entities.cells, data.name, false);
+        const ref = this.getRef(this.dbConfig().firebase.entities.cells, data.name, false);
         this.create(ref, data);
     }
 
     getCells() {
-        const ref = this.getRef(this.config.firebase.entities.cells, false, false);
+        const ref = this.getRef(this.dbConfig().firebase.entities.cells, false, false);
 
         return new Promise((resolve, reject) => {
             this.read(ref)
@@ -180,7 +177,7 @@ class FirebaseDB {
     }
 
     getCellProducts(cell) {
-        const ref = this.getRef(this.config.firebase.entities.cells_products, false, false);
+        const ref = this.getRef(this.dbConfig().firebase.entities.cells_products, false, false);
 
         return new Promise((resolve, reject) => {
             const where = {
@@ -214,13 +211,13 @@ class FirebaseDB {
     }
 
     linkCellProduct(data, doc) {
-        const ref = this.getRef(this.config.firebase.entities.cells_products, doc, false);
+        const ref = this.getRef(this.dbConfig().firebase.entities.cells_products, doc, false);
         this.create(ref, data);
     }
 
     unlinkCellProduct(doc) {
         return new Promise((resolve, reject) => {
-            const ref = this.getRef(this.config.firebase.entities.cells_products, doc, false);
+            const ref = this.getRef(this.dbConfig().firebase.entities.cells_products, doc, false);
 
             this.delete(ref);
             // .then((res) => {
@@ -233,12 +230,12 @@ class FirebaseDB {
     }
 
     addProduct(data) {
-        const ref = this.getRef(this.config.firebase.entities.products, data.name, false);
+        const ref = this.getRef(this.dbConfig().firebase.entities.products, data.name, false);
         this.create(ref, data);
     }
 
     getProducts(productNames) {
-        const ref = this.getRef(this.config.firebase.entities.products, false, false);
+        const ref = this.getRef(this.dbConfig().firebase.entities.products, false, false);
 
         return new Promise((resolve, reject) => {
             const where = {
@@ -261,7 +258,7 @@ class FirebaseDB {
     }
 
     deleteProduct(doc) {
-        const ref = this.getRef(this.config.firebase.entities.products, doc, false);
+        const ref = this.getRef(this.dbConfig().firebase.entities.products, doc, false);
 
         this.delete(ref);
         // .then((res) => {
@@ -270,6 +267,10 @@ class FirebaseDB {
         // .catch(e => {
         //     return reject(e);
         // });
+    }
+
+    dbConfig() {
+        return global.config.db.firebase;
     }
 }
 

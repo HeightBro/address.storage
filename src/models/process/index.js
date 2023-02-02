@@ -11,8 +11,6 @@ class Process {
         this.state = null;
         this.userProcess = {};
         this.userResponse = '';
-
-        this.initConfig();
     }
 
     init() {
@@ -53,11 +51,6 @@ class Process {
                     });
             }
         });
-    }
-
-    initConfig() {
-        this.config = require(path.resolve(__dirname, '../..', 'config/process'));
-        this.config.constants = require(path.resolve(__dirname, '../..', 'config/constants'));
     }
 
     setCurrentState(name) {
@@ -154,6 +147,10 @@ class Process {
 
     finalize() {
         this.db.deleteUserProcess(this.chat_id);
+    }
+
+    processConfig() {
+        return global.config.process;
     }
 }
 

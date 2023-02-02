@@ -7,7 +7,7 @@ class ViewCellProcess extends Process {
         super(processName, db, chatId);
 
         this.forceFinalizeOnLastStep = true;
-        this.states = this.config.states[this.config.constants.commands.view_cell];
+        this.states = this.processConfig().states[global.config.constants.commands.view_cell];
     }
 
     finalize() {

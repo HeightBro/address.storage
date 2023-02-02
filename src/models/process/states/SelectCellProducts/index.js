@@ -42,7 +42,7 @@ class SelectCellProductsState extends State {
     createMessage(data, process) {
         if (data) {
             // TODO: вынести в базовый класс и там брать сообщения в зависимости от контекста (процесса); убрать все сообщения в конфиг стейтов и отказаться от проброса process
-            if (process.name !== process.config.constants.commands.view_cell) this.message = 'Введите название одного из указанных ниже продуктов:\n';
+            if (process.name !== global.config.constants.commands.view_cell) this.message = 'Введите название одного из указанных ниже продуктов:\n';
 
             data.forEach(v => {
                 this.message += `${v.name}\n`;

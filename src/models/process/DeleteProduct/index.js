@@ -6,7 +6,7 @@ class DeleteProductProcess extends Process {
     constructor(processName, db, chatId) {
         super(processName, db, chatId);
 
-        this.states = this.config.states[this.config.constants.commands.delete_product];
+        this.states = this.processConfig().states[global.config.constants.commands.delete_product];
     }
 
     finalize() {

@@ -6,7 +6,7 @@ class AddProductProcess extends Process {
     constructor(processName, db, chatId) {
         super(processName, db, chatId);
 
-        this.states = this.config.states[this.config.constants.commands.add_product];
+        this.states = this.processConfig().states[global.config.constants.commands.add_product];
     }
 
     finalize() {

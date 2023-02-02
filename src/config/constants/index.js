@@ -1,8 +1,10 @@
 const path = require('path');
 
+const commands = require(path.resolve(__dirname, './commands'));
+
 const constants = () => {
     return {
-        commands: require(path.resolve(__dirname, './commands')),
+        commands: { ...commands },
     }
 }
 

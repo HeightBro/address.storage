@@ -6,7 +6,7 @@ class AddCellProcess extends Process {
     constructor(processName, db, chatId) {
         super(processName, db, chatId);
 
-        this.states = this.config.states[this.config.constants.commands.add_cell];
+        this.states = this.processConfig().states[global.config.constants.commands.add_cell];
 
         this.state = new this.states[0].class(this.states[0].name, this.db);
     }
